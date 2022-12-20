@@ -31,20 +31,20 @@ def add_padding(img, pad_l, pad_t, pad_r, pad_b):
 
     return img
 
-def load_and_prep_digit(img_path):
-    # Read in
-    img = cv2.imread(img_path, cv2.IMREAD_GRAYSCALE)
+def prep_digit(img):
     # Transform
     img = cv2.resize(img, (28, 28), interpolation = cv2.INTER_LINEAR)
     img = cv2.bitwise_not(img)
     (thresh, img) = cv2.threshold(img, 110, 255, cv2.THRESH_BINARY)
+    
     # Centering
-    bbox = get_bounding_box(img)
-    padd_x = int((28 - bbox[4]) / 2)
-    padd_y = int((28 - bbox[5]) / 2)
-    cropped_image = img[bbox[1]:bbox[3]+1, bbox[0]:bbox[2]+1]
-    padded_image = add_padding(cropped_image,
-                                padd_x, padd_y, 
-                                27 - bbox[4] - padd_x, 27 - bbox[5] - padd_y)
+    ### ToDo: Improve it before using
+    # bbox = get_bounding_box(img)
+    # padd_x = int((28 - bbox[4]) / 2)
+    # padd_y = int((28 - bbox[5]) / 2)
+    # cropped_image = img[bbox[1]:bbox[3]+1, bbox[0]:bbox[2]+1]
+    # padded_image = add_padding(cropped_image,
+    #                             padd_x, padd_y, 
+    #                             27 - bbox[4] - padd_x, 27 - bbox[5] - padd_y)
     
     return img
