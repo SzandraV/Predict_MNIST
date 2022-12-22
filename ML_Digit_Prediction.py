@@ -48,7 +48,7 @@ def load_my_digits():
     my_digits = np.empty((1, 28*28))
 
     for i in range(0, 10):
-        my_digit_path = './My_digits/set_merged/num{}.jpg'.format(i)
+        my_digit_path = './digits/set_merged/num{}.jpg'.format(i)
         img = cv2.imread(my_digit_path, cv2.IMREAD_GRAYSCALE)
         my_digit = utils.prep_digit(img)
         img_to_test = np.reshape(my_digit, (1, 28*28))
@@ -59,11 +59,11 @@ def load_my_digits():
     return my_digits
 
 def intro():
-    print("Hello this is ML Model Platform for Your Digit's prediction :)")
+    print("Hello this is ML Model Platform for Handwritten Digit's prediction :)")
 
 def main_program():
     st.set_page_config(layout = "wide")
-    st.header("ML Model Platform for Your Digit's prediction")
+    st.header("ML Model Platform for Handwritten Digit's prediction")
 
     if 'model_started' not in st.session_state:
         st.session_state['model_started'] = False
@@ -202,13 +202,13 @@ def main_program():
             input_numpy_array = np.array(canvas_result.image_data)
             # Get PIL image
             input_image = Image.fromarray(input_numpy_array.astype('uint8'), 'RGBA')
-            input_image.save('user_input.png')
+            input_image.save('./temp/user_input.png')
             # Convert it to grayscale
             input_image_gs = input_image.convert('L')
             input_image_gs_np = np.asarray(input_image_gs.getdata()).reshape(200,200)
             # Create a temporary image for opencv to read it
-            input_image_gs.save('temp_for_cv2.jpg')
-            image = cv2.imread('temp_for_cv2.jpg', 0)
+            input_image_gs.save('./temp/temp_for_cv2.jpg')
+            image = cv2.imread('./temp/temp_for_cv2.jpg', 0)
             
             # Centering
             # Bbox
@@ -240,11 +240,11 @@ def main_program():
             tensor_image = convert_tensor(tensor_image)
 
             # So we use matplotlib to save it instead
-            plt.imsave('processed_tensor.png', tensor_image.detach().cpu().numpy().reshape(28,28), cmap='gray')
+            plt.imsave('./temp/processed_tensor.png', tensor_image.detach().cpu().numpy().reshape(28,28), cmap='gray')
             
             if st.button('Predict'):
                 ### Compute the predictions based on our model
-                img = cv2.imread('processed_tensor.png', cv2.IMREAD_GRAYSCALE)
+                img = cv2.imread('./temp/processed_tensor.png', cv2.IMREAD_GRAYSCALE)
                 img_to_test = np.reshape(img, (1, 28*28))
                 loaded_model = joblib.load('./models/best_SVM_model.sav'.format(page))
                 own_pred = loaded_model.predict(img_to_test)

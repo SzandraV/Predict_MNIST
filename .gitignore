@@ -1,1 +1,3 @@
 DB_ML_History_MNIST.db
+__pycache__/
+temp/
