@@ -90,7 +90,7 @@ def main_program():
     if page == 'Our digits':
         col1, col2 = st.columns([2,4])
         with col1:
-            if st.button('Load model'):
+            if st.button("Load our model and see Digit's prediction :)"):
                 t0 = time.time()
                 print('{} Model is loading...'.format(page))
                 with st.spinner(text = 'Digit prediction Model is loading... \n\nPlease respect that it could be take some minutes :)'.format(page)):
@@ -105,20 +105,19 @@ def main_program():
                 st.warning('Please load in your model')
             else:
                 my_digit_test = load_my_digits()
-                print('My digits are loaded')
-                st.success('My digits are loaded and ready for prediction :)')
+                print('Digits are loaded')
+                st.success('Digits are loaded and ready for prediction :)')
                 own_pred = loaded_model.predict(my_digit_test)
                 st.write("Model's accuracy on my digits: {}".format(accuracy_score(labels, own_pred)))
-                st.write("That's all folks :) Thanks for now.")
 
         with col2:
             if not st.session_state['model_started'] is True or st.session_state['current_model'] != page:
-                st.warning('Do not forget to load the model! to see the Prediction')
+                st.warning('Do not forget to load the model to see the Prediction')
             else:
                 # Visualize Szandra's digits
                 plt.figure()
                 fig, axis = plt.subplots(ncols = number_of_classes, figsize=(32,4))
-                fig.suptitle('My digits by Classes\n\n', fontsize = 30)
+                fig.suptitle('Digits by Classes\n\n', fontsize = 30)
 
                 for i in range(number_of_classes):
                     axis[i].set_ylabel(labels[i], rotation=0, labelpad = 50)
@@ -131,7 +130,7 @@ def main_program():
                 # Visualize Szandra's digits predicted Classes
                 plt.figure()
                 fig, axis = plt.subplots(ncols = number_of_classes, figsize=(32,4))
-                fig.suptitle("My digits's Predicted Class\n\n", fontsize = 30)
+                fig.suptitle("Digits's Predicted Class\n\n", fontsize = 30)
 
                 for i in range(number_of_classes):
                     axis[i].set_ylabel(labels[i], rotation=0, labelpad = 50)
@@ -146,7 +145,7 @@ def main_program():
         col1, col2 = st.columns([2,4])
         with col1:
             # Load up an Image
-            st.warning('Please respect and follow:\n\n --> Image has a squared shape (tex: 28 * 28)')
+            st.warning('Please respect and follow:\n\n --> Image should have a squared shape (tex: 28 * 28)')
             st.write('### Upload an Image')
             uploaded_image = st.file_uploader("", type=["png", "jpg", "jpeg"])
             if uploaded_image is not None:
@@ -159,24 +158,24 @@ def main_program():
                     width=200
                 )
         with col2:
-            if st.button('Load model'):
-                t0 = time.time()
-                print('Model is loading...')
-                with st.spinner(text = 'Digit prediction Model is loading... \n\nPlease respect that it could be take some minutes :)'.format(page)):
-                    loaded_model = joblib.load('./models/best_SVM_model.sav')
-                    st.session_state['model_started'] = True
-                    st.session_state['current_model'] = page
-                t1 = time.time()
-                print('Model loaded and it tooks {:.1f}s.'.format(t1 - t0))
-                st.success('Model loaded and it tooks {:.1f}s.'.format(t1 - t0))
-            if not st.session_state['model_started'] is True or st.session_state['current_model'] != page:
-                st.warning('Please\n\n - load up your digit first \n\n - then in your model')
+            if uploaded_image is None: #or not st.session_state['model_started'] is True
+                st.warning('Please load up your digit first')
             else:
-                my_digit = utils.prep_digit(img_array)
-                img_to_test = np.reshape(my_digit, (1, 28*28))
-                own_pred = loaded_model.predict(img_to_test)
-                st.write("Your uploaded Image's Prediction:") 
-                st.write('### ' +str(own_pred[0]))
+                if st.button('Predict'):
+                    t0 = time.time()
+                    print('Model is loading...')
+                    with st.spinner(text = 'Digit prediction Model is loading... \n\nPlease respect that it could be take some minutes :)'.format(page)):
+                        loaded_model = joblib.load('./models/best_SVM_model.sav')
+                        st.session_state['model_started'] = True
+                        st.session_state['current_model'] = page
+                    t1 = time.time()
+                    print('Model loaded and it tooks {:.1f}s.'.format(t1 - t0))
+                    st.success('Model loaded and it tooks {:.1f}s.'.format(t1 - t0))
+                    my_digit = utils.prep_digit(img_array)
+                    img_to_test = np.reshape(my_digit, (1, 28*28))
+                    own_pred = loaded_model.predict(img_to_test)
+                    st.write("Your uploaded Image's Prediction:") 
+                    st.write('### ' +str(own_pred[0]))
 
     #   Predict your digits
     elif page == 'Your digit':
