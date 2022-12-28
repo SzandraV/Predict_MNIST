@@ -59,7 +59,7 @@ def load_my_digits():
     return my_digits
 
 def intro():
-    print("Hello this is ML Model Platform for Handwritten Digit's prediction :)")
+    print("Hello, this is a Platform for Handwritten Digit's prediction :)")
 
 def main_program():
     st.set_page_config(layout = "wide")
@@ -72,7 +72,7 @@ def main_program():
         st.session_state['current_model'] = None
 
     ### Inputs / Variables / Datasets
-    functions = ['Our digits', 'Load up an Image', 'Your digit']
+    functions = ["Project's digits", 'Load up an Image', 'Your digit']
     labels = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
     number_of_classes = 10
 
@@ -87,10 +87,10 @@ def main_program():
         # due to a UI interaction in the script."
 
     #   Predict My digits
-    if page == 'Our digits':
+    if page == "Project's digits":
         col1, col2 = st.columns([2,4])
         with col1:
-            if st.button("Load our model and see Digit's prediction :)"):
+            if st.button("Load the model and see the Digit's prediction :)"):
                 t0 = time.time()
                 print('{} Model is loading...'.format(page))
                 with st.spinner(text = 'Digit prediction Model is loading... \n\nPlease respect that it could be take some minutes :)'.format(page)):
@@ -102,13 +102,13 @@ def main_program():
                 st.success('Model loaded and it tooks {:.1f}s.'.format(t1 - t0))
 
             if not st.session_state['model_started'] is True or st.session_state['current_model'] != page:
-                st.warning('Please load in your model')
+                st.warning('Please load in the model')
             else:
                 my_digit_test = load_my_digits()
                 print('Digits are loaded')
                 st.success('Digits are loaded and ready for prediction :)')
                 own_pred = loaded_model.predict(my_digit_test)
-                st.write("Model's accuracy on my digits: {}".format(accuracy_score(labels, own_pred)))
+                st.write("Model's accuracy on these digits: {}".format(accuracy_score(labels, own_pred)))
 
         with col2:
             if not st.session_state['model_started'] is True or st.session_state['current_model'] != page:
@@ -154,7 +154,7 @@ def main_program():
                 # Show Image
                 st.image(
                     image,
-                    caption="Your digit's shape {}".format(img_array.shape[0:2]),
+                    caption="Your uploaded digit's shape {}".format(img_array.shape[0:2]),
                     width=200
                 )
         with col2:
